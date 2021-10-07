@@ -77,11 +77,13 @@ void getArg(int argc, char **argv) {
 // half buffer end with EOF
 // valid space: HALFBUFSIZE - 1
 void getHalfBuffer(char *buffp) {
-  for (int i = 0; i < HALFBUFSIZE - 1; i++) {
-    buffp[i] = fgetc(infp);
-    if (buffp[i] == EOF) break;
-  }
-  buffp[HALFBUFSIZE - 1] = EOF;
+  int cnt = fread(buffp, 1, HALFBUFSIZE - 1, infp);
+  // for (int i = 0; i < HALFBUFSIZE - 1; i++) {
+  //   buffp[i] = fgetc(infp);
+  //   if (buffp[i] == EOF) break;
+  // }
+  // buffp[HALFBUFSIZE - 1] = EOF;
+  buffp[cnt] = EOF;
   //   printf("%s", buffer);
 }
 
@@ -167,9 +169,9 @@ int isUnaryOperator() {
 void throwError(string str) {
   retreatPtr();
   fprintf(outfp, "An error occurred in Line %d:%d: ", lineCnt, charInLine);
-  fprintf(outfp, "Message: %s\n", str.c_str());
+  fprintf(outfp, " %s\n", str.c_str());
   printf("An error occurred in Line %d:%d: ", lineCnt, charInLine);
-  printf("Message: %s\n", str.c_str());
+  printf(" %s\n", str.c_str());
   state = 0;
 }
 
@@ -352,7 +354,7 @@ void insertChar() {
       fprintf(outfp, "%c Char %d\n", ch, i);
       printf("%c Char %d\n", ch, i);
       flag = 1;
-      break;  
+      break;
     }
   if (!flag) {
     constChar.push_back(ch);
@@ -521,5 +523,7 @@ int main(int argc, char **argv) {
   getArg(argc, argv);
   init();
   lexAnalysis();
+  fclose(infp);
+  fclose(outfp);
   return 0;
 }

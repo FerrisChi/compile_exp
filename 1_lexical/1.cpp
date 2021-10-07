@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 int sum(int count, ...) {
+  va_list ap;
+  va_start(ap, count);
   
 }
 int main() {
