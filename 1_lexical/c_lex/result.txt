@@ -1,0 +1,101 @@
+Input file: test.txt
+Output file: result.txt
+
+Line 0:
+# unaryop #
+include id 0
+< unaryop <
+iostream id 1
+> unaryop >
+
+Line 1:
+using id 2
+namespace id 3
+std id 4
+; unaryop ;
+
+Line 2:
+int keyword int
+main id 5
+( unaryop (
+) unaryop )
+{ unaryop {
+
+Line 3:
+double keyword double
+a id 6
+= unaryop =
+0.300000 double 0
+; unaryop ;
+
+Line 4:
+double keyword double
+b id 7
+= unaryop =
+An error occurred in Line 4:21: Message: 
+; unaryop ;
+
+Line 5:
+double keyword double
+c id 8
+= unaryop =
+6 int 0
+; unaryop ;
+
+Line 6:
+double keyword double
+d id 9
+= unaryop =
+300.000000 double 1
+; unaryop ;
+
+Line 7:
+printf id 10
+( unaryop (
+"%d %d" const_char[7] 0
+, unaryop ,
+a id 6
+, unaryop ,
+b id 7
+) unaryop )
+; unaryop ;
+
+Line 8:
+char keyword char
+s id 11
+[ unaryop [
+20 int 1
+] unaryop ]
+= unaryop =
+An error occurred in Line 8:29: Message: Lack of "
+
+Line 9:
+asdfasdf id 12
+An error occurred in Line 9:16: Message: Lack of "
+
+Line 10:
+printf id 10
+( unaryop (
+"%s" const_char[4] 1
+, unaryop ,
+s id 11
+) unaryop )
+; unaryop ;
+
+Line 11:
+return keyword return
+0 int 2
+; unaryop ;
+
+Line 12:
+} unaryop }
+
+Total:
+	12 line
+	60 tokens
+	7 keywords
+	17 identifiers
+	5 constants
+	29 operator
+	2 string
+	0 char

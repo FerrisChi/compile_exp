@@ -1,0 +1,127 @@
+步骤  符号栈               当前输入的符号   动作
+   0 #A                  int           
+   1 #B                  int           A->B
+   2 #J)E(DC             int           B->CD(E)J
+   3 #J)E(Dkinds         int           C->kinds
+   4 #J)E(D              main          
+   5 #J)E(letter         main          D->letter
+   6 #J)E(               (             
+   7 #J)E                )             
+   8 #J)                 )             E->ε
+   9 #J                  {             
+  10 #}I{                {             J->{I}
+  11 #}I                 int           
+  12 #}IK                int           I->KI
+  13 #}I;GDC             int           K->CDG;
+  14 #}I;GDkinds         int           C->kinds
+  15 #}I;GD              x             
+  16 #}I;Gletter         x             D->letter
+  17 #}I;G               ,             
+  18 #}I;GD,             ,             G->,DG
+  19 #}I;GD              y             
+  20 #}I;Gletter         y             D->letter
+  21 #}I;G               ;             
+  22 #}I;                ;             G->ε
+  23 #}I                 char          
+  24 #}IK                char          I->KI
+  25 #}I;GDC             char          K->CDG;
+  26 #}I;GDkinds         char          C->kinds
+  27 #}I;GD              ch            
+  28 #}I;Gletter         ch            D->letter
+  29 #}I;G               ;             
+  30 #}I;                ;             G->ε
+  31 #}I                 int           
+  32 #}IK                int           I->KI
+  33 #}I;GDC             int           K->CDG;
+  34 #}I;GDkinds         int           C->kinds
+  35 #}I;GD              e             
+  36 #}I;Gletter         e             D->letter
+  37 #}I;G               =             
+  38 #}I;GD=             =             G->=DG
+  39 #}I;GD              binary:101    
+  40 #}I;Gdigit          binary:101    D->digit
+  41 #}I;G               ;             
+  42 #}I;                ;             G->ε
+  43 #}I                 int           
+  44 #}IK                int           I->KI
+  45 #}I;GDC             int           K->CDG;
+  46 #}I;GDkinds         int           C->kinds
+  47 #}I;GD              b             
+  48 #}I;Gletter         b             D->letter
+  49 #}I;G               =             
+  50 #}I;GD=             =             G->=DG
+  51 #}I;GD              binary:10     
+  52 #}I;Gdigit          binary:10     D->digit
+  53 #}I;G               ,             
+  54 #}I;GD,             ,             G->,DG
+  55 #}I;GD              c             
+  56 #}I;Gletter         c             D->letter
+  57 #}I;G               ;             
+  58 #}I;                ;             G->ε
+  59 #}I                 int           
+  60 #}IK                int           I->KI
+  61 #}I;GDC             int           K->CDG;
+  62 #}I;GDkinds         int           C->kinds
+  63 #}I;GD              i             
+  64 #}I;Gletter         i             D->letter
+  65 #}I;G               ;             
+  66 #}I;                ;             G->ε
+  67 #}I                 for           
+  68 #}IN                for           I->NI
+  69 #}IO                for           N->O
+  70 #}I}I{)XD;ULD(for   for           O->for(DLU;DX){I}
+  71 #}I}I{)XD;ULD(      (             
+  72 #}I}I{)XD;ULD       i             
+  73 #}I}I{)XD;ULletter  i             D->letter
+  74 #}I}I{)XD;UL        =             
+  75 #}I}I{)XD;U;R=      =             L->=R;
+  76 #}I}I{)XD;U;R       binary:0      
+  77 #}I}I{)XD;U;FT      binary:0      R->TF
+  78 #}I}I{)XD;U;Fdigit  binary:0      T->digit
+  79 #}I}I{)XD;U;F       ;             
+  80 #}I}I{)XD;U;        ;             F->ε
+  81 #}I}I{)XD;U         i             
+  82 #}I}I{)XD;DVD       i             U->DVD
+  83 #}I}I{)XD;DVletter  i             D->letter
+  84 #}I}I{)XD;DV        <             
+  85 #}I}I{)XD;D<        <             V-><
+  86 #}I}I{)XD;D         binary:101    
+  87 #}I}I{)XD;digit     binary:101    D->digit
+  88 #}I}I{)XD;          ;             
+  89 #}I}I{)XD           i             
+  90 #}I}I{)Xletter      i             D->letter
+  91 #}I}I{)X            ++            
+  92 #}I}I{)++           ++            X->++
+  93 #}I}I{)             )             
+  94 #}I}I{              {             
+  95 #}I}I               if            
+  96 #}I}IM              if            I->MI
+  97 #}I}I}I{else}I{)U(ifif            M->if(U){I}else{I}
+  98 #}I}I}I{else}I{)U(  (             
+  99 #}I}I}I{else}I{)U   e             
+ 100 #}I}I}I{else}I{)DVD e             U->DVD
+ 101 #}I}I}I{else}I{)DVlettere             D->letter
+ 102 #}I}I}I{else}I{)DV  >             
+ 103 #}I}I}I{else}I{)D>  >             V->>
+ 104 #}I}I}I{else}I{)D   b             
+ 105 #}I}I}I{else}I{)letterb             D->letter
+ 106 #}I}I}I{else}I{)    )             
+ 107 #}I}I}I{else}I{     {             
+ 108 #}I}I}I{else}I      c             
+ 109 #}I}I}I{else}ILD    c             I->DLI
+ 110 #}I}I}I{else}ILletterc             D->letter
+ 111 #}I}I}I{else}IL     =             
+ 112 #}I}I}I{else}I;R=   =             L->=R;
+ 113 #}I}I}I{else}I;R    e             
+ 114 #}I}I}I{else}I;FT   e             R->TF
+ 115 #}I}I}I{else}I;Flettere             T->letter
+ 116 #}I}I}I{else}I;F    +             
+ 117 #}I}I}I{else}I;FT+  +             F->+TF
+ 118 #}I}I}I{else}I;FT   b             
+ 119 #}I}I}I{else}I;Fletterb             T->letter
+ 120 #}I}I}I{else}I;F    ;             
+ 121 #}I}I}I{else}I;     ;             F->ε
+ 122 #}I}I}I{else}I      }             
+ 123 #}I}I}I{else}       }             I->ε
+ 124 #}I}I}I{else        {             
+error!

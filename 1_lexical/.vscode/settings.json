@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "xstring": "cpp",
+        "type_traits": "cpp",
+        "charconv": "cpp",
+        "limits": "cpp",
+        "regex": "cpp",
+        "sstream": "cpp",
+        "xthread": "cpp",
+        "xhash": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp",
+        "cmath": "cpp",
+        "ratio": "cpp",
+        "*.tcc": "cpp",
+        "vector": "cpp"
+    }
+}
