@@ -1,101 +1,241 @@
-Input file: test.txt
-Output file: result.txt
-
 Line 0:
-# unaryop #
+# op #
 include id 0
-< unaryop <
-iostream id 1
-> unaryop >
+< op <
+stdio id 1
+. op .
+h id 2
+> op >
 
 Line 1:
-using id 2
-namespace id 3
-std id 4
-; unaryop ;
 
 Line 2:
-int keyword int
-main id 5
-( unaryop (
-) unaryop )
-{ unaryop {
+# op #
+include id 0
+"5-6.h" const_char[7] 0
 
 Line 3:
-double keyword double
-a id 6
-= unaryop =
-0.300000 double 0
-; unaryop ;
+# op #
+include id 0
+"5-12.h" const_char[8] 1
 
 Line 4:
-double keyword double
-b id 7
-= unaryop =
-An error occurred in Line 4:21: Message: 
-; unaryop ;
+# op #
+include id 0
+"5-1.h" const_char[7] 2
 
 Line 5:
-double keyword double
-c id 8
-= unaryop =
-6 int 0
-; unaryop ;
 
 Line 6:
-double keyword double
-d id 9
-= unaryop =
-300.000000 double 1
-; unaryop ;
+void keyword void
+Swap id 3
+( op (
+int keyword int
+x id 4
+, op ,
+int keyword int
+y id 5
+) op )
 
 Line 7:
-printf id 10
-( unaryop (
-"%d %d" const_char[7] 0
-, unaryop ,
-a id 6
-, unaryop ,
-b id 7
-) unaryop )
-; unaryop ;
+{ op {
 
 Line 8:
-char keyword char
-s id 11
-[ unaryop [
-20 int 1
-] unaryop ]
-= unaryop =
-An error occurred in Line 8:29: Message: Lack of "
+int keyword int
+temp id 6
+; op ;
 
 Line 9:
-asdfasdf id 12
-An error occurred in Line 9:16: Message: Lack of "
 
 Line 10:
-printf id 10
-( unaryop (
-"%s" const_char[4] 1
-, unaryop ,
-s id 11
-) unaryop )
-; unaryop ;
+temp id 6
+= op =
+x id 4
+; op ;
 
 Line 11:
-return keyword return
-0 int 2
-; unaryop ;
+x id 4
+= op =
+y id 5
+; op ;
 
 Line 12:
-} unaryop }
+y id 5
+= op =
+temp id 6
+; op ;
+
+Line 13:
+} op }
+
+Line 14:
+int keyword int
+main id 7
+( op (
+) op )
+{ op {
+
+Line 15:
+double keyword double
+a id 8
+= op =
+0.300000 double 0
+; op ;
+
+Line 16:
+double keyword double
+b id 9
+= op =
+4 int 0
+; op ;
+
+Line 17:
+double keyword double
+c id 10
+= op =
+6 int 1
+; op ;
+
+Line 18:
+An error occurred in Line 18:6:  Illegal number.
+a5 id 11
+= op =
+3 int 2
+; op ;
+
+Line 19:
+double keyword double
+d id 12
+= op =
+300.000000 double 1
+; op ;
+
+Line 20:
+printf id 13
+( op (
+"%d %d" const_char[7] 3
+, op ,
+a id 8
+, op ,
+b id 9
+) op )
+; op ;
+
+Line 21:
+char keyword char
+s id 14
+[ op [
+20 int 3
+] op ]
+= op =
+"asdfasas\'dfasdf" const_char[18] 4
+; op ;
+
+Line 22:
+char keyword char
+s1 id 15
+= op =
+An error occurred in Line 22:20:  Too many characters entered.
+sd id 16
+An error occurred in Line 22:26:  Too many characters entered.
+
+Line 23:
+char keyword char
+s2 id 17
+= op =
+An error occurred in Line 23:29:  Lack of "
+
+Line 24:
+zxcvaerh id 18
+An error occurred in Line 24:15:  Lack of "
+
+Line 25:
+; op ;
+
+Line 26:
+int keyword int
+a id 8
+= op =
+2 int 4
+, op ,
+b id 9
+= op =
+3 int 2
+, op ,
+An error occurred in Line 26:33:  Illegal number.
+c id 10
+= op =
+4 int 0
+; op ;
+
+Line 27:
+a id 8
+++ op ++
+<<= op <<=
+b id 9
+; op ;
+
+Line 28:
+a id 8
+>>= op >>=
+b id 9
+-- op --
+; op ;
+
+Line 29:
+printf id 13
+( op (
+"%s" const_char[4] 5
+, op ,
+s id 14
+) op )
+; op ;
+z id 19
+
+Line 30:
+printf id 13
+( op (
+"璇ユ枃妗ｅ叡鍑虹幇 %d 涓湁鏁堝崟璇?" const_char[55] 6
+, op ,
+wordcount id 20
+) op )
+; op ;
+
+Line 31:
+Show id 21
+( op (
+H id 22
+, op ,
+10.000000 double 2
+/ op /
+100 int 5
+) op )
+; op ;
+
+Line 32:
+DestroyTable id 23
+( op (
+H id 22
+) op )
+; op ;
+
+Line 33:
+
+Line 34:
+return keyword return
+0 int 6
+; op ;
+
+Line 35:
+} op }
 
 Total:
-	12 line
-	60 tokens
-	7 keywords
-	17 identifiers
-	5 constants
-	29 operator
-	2 string
+	35 line
+	153 tokens
+	14 keywords
+	46 identifiers
+	12 constants
+	74 operator
+	7 string
 	0 char
+Total error: 6

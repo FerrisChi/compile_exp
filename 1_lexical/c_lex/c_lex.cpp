@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int HALFBUFSIZE = 1024;
-#define DEBUG(x) printf(x);
+const int OPTABLESIZE = 45;
 const int UNARYOPSIZE = 25;
-const int BINARYOPSIZE = 16;
+const int BINARYOPSIZE = 20;
 const int KEYWORDSIZE = 44;
 const int MAXIDLENGTH = 1024;
 
@@ -12,7 +12,7 @@ char *inputPath, *outputPath, *lsBufp, *leBufp, *rsBufp, *reBufp, *beginp,
     *forwardp;
 char buffer[HALFBUFSIZE * 2 + 2], nowC;
 int charcCnt, charInLine, lineCnt, keywordCnt, idCnt, numCnt, opCnt, charCnt,
-    strCnt, wordCnt;
+    strCnt, wordCnt, errorCnt;
 int state, crossFlag;
 int numInt, numK, numE, numF;
 double numDoub;
@@ -23,15 +23,14 @@ vector<int> constInt;
 vector<long long> constLong;
 vector<char> constChar;
 
-int unaryOpNxtState[UNARYOPSIZE] = {8,  8,  8,  8,  8,  9,  9,  9,
-                                    9,  9,  9,  11, 15, 17, 10, 10,
-                                    10, 10, 10, 10, 10, 10, 10, 10};
-char unaryOp[UNARYOPSIZE] = {'*', '%', '!', '^', '=',  '+',  '-', '<',
-                             '>', '|', '&', '/', '\'', '\"', '#', '(',
-                             ')', '[', ']', '{', '}',  ';',  ',', '~'};
-char binaryOp[BINARYOPSIZE][5] = {"++", "--", "&&", "||", "<<", ">>",
-                                  "==", "<=", "!=", ">=", "+=", "-=",
-                                  "*=", "/=", "%=", "^="};
+int unaryOpNxtState[UNARYOPSIZE] = {8,  8,  8,  8,  8,  18, 18, 3,  9,
+                                    9,  9,  9,  11, 15, 17, 10, 10, 10,
+                                    10, 10, 10, 10, 10, 10, 10};
+char opTable[OPTABLESIZE][5] = {
+    "*",  "%",  "!",  "^",  "=",  "+",   "-",   ".",   "<",  ">",  "|",  "&",
+    "/",  "\'", "\"", "#",  "(",  ")",   "[",   "]",   "{",  "}",  ";",  ",",
+    "~",  "++", "--", "&&", "||", "<<",  ">>",  "==",  "<=", "!=", ">=", "+=",
+    "-=", "*=", "/=", "%=", "^=", "&&=", "||=", "<<=", ">>="};
 
 // Standard C keywords
 char keywords[KEYWORDSIZE][15] = {
@@ -65,7 +64,7 @@ void getArg(int argc, char **argv) {
   if ((a = argPos(const_cast<char *>("-input"), argc, argv)) > 0) {
     inputPath = argv[a + 1];
   } else {
-    inputPath = const_cast<char *>("test.txt");
+    inputPath = const_cast<char *>("test.c");
   }
   if ((a = argPos(const_cast<char *>("-output"), argc, argv)) > 0) {
     outputPath = argv[a + 1];
@@ -78,13 +77,7 @@ void getArg(int argc, char **argv) {
 // valid space: HALFBUFSIZE - 1
 void getHalfBuffer(char *buffp) {
   int cnt = fread(buffp, 1, HALFBUFSIZE - 1, infp);
-  // for (int i = 0; i < HALFBUFSIZE - 1; i++) {
-  //   buffp[i] = fgetc(infp);
-  //   if (buffp[i] == EOF) break;
-  // }
-  // buffp[HALFBUFSIZE - 1] = EOF;
   buffp[cnt] = EOF;
-  //   printf("%s", buffer);
 }
 
 void init() {
@@ -94,7 +87,7 @@ void init() {
   rsBufp = buffer + HALFBUFSIZE, reBufp = buffer + HALFBUFSIZE * 2 - 1;
   forwardp = lsBufp;
   *leBufp = *reBufp = EOF;
-  fprintf(outfp, "Input file: %s\nOutput file: %s\n\n", inputPath, outputPath);
+  printf("Input file: %s\nOutput file: %s\n", inputPath, outputPath);
   getHalfBuffer(lsBufp);
   fprintf(outfp, "Line 0:\n");
 }
@@ -149,29 +142,23 @@ bool isLetter() {
 bool isDigit() { return nowC >= '0' && nowC <= '9'; }
 
 bool isWhiteSpace() {
-  if (nowC == ' ' || nowC == '\t') return true;
-  if (nowC == '\n' || nowC == '\r') {
-    fprintf(outfp, "\nLine %d:\n", ++lineCnt);
-    charInLine = 0;
-    return true;
-  }
+  if (nowC == ' ' || nowC == '\t' || nowC == '\n' || nowC == '\r') return true;
   return false;
 }
 
 // return -1 if nowC isn't a operator, otherwise return index of nowC
 int isUnaryOperator() {
   for (int i = 0; i < UNARYOPSIZE; i++)
-    if (nowC == unaryOp[i]) return unaryOpNxtState[i];
+    if (nowC == opTable[i][0]) return unaryOpNxtState[i];
   return -1;
 }
 
 // throw error retreat forwardptr and turn to state 0
 void throwError(string str) {
+  errorCnt++;
   retreatPtr();
   fprintf(outfp, "An error occurred in Line %d:%d: ", lineCnt, charInLine);
   fprintf(outfp, " %s\n", str.c_str());
-  printf("An error occurred in Line %d:%d: ", lineCnt, charInLine);
-  printf(" %s\n", str.c_str());
   state = 0;
 }
 
@@ -216,7 +203,6 @@ void insertId() {
     if (strcmp(idf, keywords[i]) == 0) {  // find keywords
       flag = 1;
       fprintf(outfp, "%s keyword %s\n", idf, idf);
-      printf("%s keyword %s\n", idf, idf);
       keywordCnt++;
       break;
     }
@@ -226,14 +212,12 @@ void insertId() {
       flag = 1;
       idCnt++;
       fprintf(outfp, "%s id %d\n", idf, i);
-      printf("%s id %d\n", idf, i);
       break;
     }
   if (!flag) {
     idCnt++;
     identifier.push_back(tmp);
     fprintf(outfp, "%s id %d\n", idf, identifier.size() - 1);
-    printf("%s id %d\n", idf, identifier.size() - 1);
   }
   free(idf);
   state = 0;
@@ -260,40 +244,34 @@ void insertConstant() {
       if (constDouble[i] == tmp) {
         flag = 1;
         fprintf(outfp, "%lf double %d\n", tmp, i);
-        printf("%lf double %d\n", tmp, i);
         break;
       }
     if (!flag) {
       constDouble.push_back(tmp);
       fprintf(outfp, "%lf double %d\n", tmp, constDouble.size() - 1);
-      printf("%lf double %d\n", tmp, constDouble.size() - 1);
     }
   } else if (tmp > INT_MAX) {  // long long
     for (int i = 0; i < constLong.size(); i++)
       if (constLong[i] == tmp) {
         flag = 1;
         fprintf(outfp, "%lld long long %d\n", (long long)tmp, i);
-        printf("%lld long long %d\n", (long long)tmp, i);
         break;
       }
     if (!flag) {
       constLong.push_back(tmp);
       fprintf(outfp, "%lld long long %d\n", (long long)tmp,
               constLong.size() - 1);
-      printf("%lld long long %d\n", (long long)tmp, constLong.size() - 1);
     }
   } else {  // int
     for (int i = 0; i < constInt.size(); i++)
       if (constInt[i] == tmp) {
         flag = 1;
         fprintf(outfp, "%d int %d\n", (int)tmp, i);
-        printf("%d int %d\n", (int)tmp, i);
         break;
       }
     if (!flag) {
       constInt.push_back(tmp);
       fprintf(outfp, "%d int %d\n", (int)tmp, constInt.size() - 1);
-      printf("%d int %d\n", (int)tmp, constInt.size() - 1);
     }
   }
 }
@@ -301,21 +279,11 @@ void insertConstant() {
 // insert operator(delimiter) into table and turn to state 0
 void insertOp() {
   char *op = getString();
-  if (strlen(op) == 1) {
-    for (int i = 0; i < UNARYOPSIZE; i++)
-      if (op[0] == unaryOp[i]) {
-        fprintf(outfp, "%s unaryop %s\n", op, op);
-        printf("%s unaryop %s\n", op, op);
-        break;
-      }
-  } else {
-    for (int i = 0; i < BINARYOPSIZE; i++)
-      if (strcmp(op, binaryOp[i]) == 0) {
-        fprintf(outfp, "%s binaryop %s\n", op, op);
-        printf("%s binaryop %s\n", op, op);
-        break;
-      }
-  }
+  for (int i = 0; i < OPTABLESIZE; i++)
+    if (strcmp(op, opTable[i]) == 0) {
+      fprintf(outfp, "%s op %s\n", op, op);
+      break;
+    }
   free(op);
   opCnt++;
   state = 0;
@@ -329,7 +297,6 @@ void insertStr() {
   for (int i = 0; i < constStr.size(); i++)
     if (constStr[i] == tmpstr) {
       fprintf(outfp, "%s const_char[%d] %d\n", str, (int)strlen(str), i);
-      printf("%s const_char[%d] %d\n", str, (int)strlen(str), i);
       flag = 1;
       break;
     }
@@ -337,8 +304,6 @@ void insertStr() {
     constStr.push_back(tmpstr);
     fprintf(outfp, "%s const_char[%d] %d\n", str, (int)strlen(str),
             constStr.size() - 1);
-    printf("%s const_char[%d] %d\n", str, (int)strlen(str),
-           constStr.size() - 1);
   }
   free(str);
   strCnt++;
@@ -352,14 +317,12 @@ void insertChar() {
   for (int i = 0; i < constChar.size(); i++)
     if (constChar[i] == ch) {
       fprintf(outfp, "%c Char %d\n", ch, i);
-      printf("%c Char %d\n", ch, i);
       flag = 1;
       break;
     }
   if (!flag) {
     constChar.push_back(ch);
     fprintf(outfp, "%c Char %d\n", ch, constChar.size() - 1);
-    printf("%c Char %d\n", ch, constChar.size() - 1);
   }
   charCnt++;
   state = 0;
@@ -375,7 +338,13 @@ void lexAnalysis() {
     // }
     switch (state) {
       case 0:
-        if (isWhiteSpace()) continue;
+        if (isWhiteSpace()) {
+          if (nowC == '\n' || nowC == '\r') {
+            fprintf(outfp, "\nLine %d:\n", ++lineCnt);
+            charInLine = 0;
+          }
+          continue;
+        }
         beginp = backPtr(1);
         if (isLetter()) {
           state = 1;
@@ -387,8 +356,11 @@ void lexAnalysis() {
           state = 3;
         } else if ((flag = isUnaryOperator()) != -1) {
           state = flag;
-        } else if (nowC != EOF)
-          throwError("unkown sign.");
+        } else if (nowC != EOF) {
+          throwError("Unkown sign.");
+          getNextChar();  // need go forward
+        }
+
         break;
 
       case 1:
@@ -405,6 +377,8 @@ void lexAnalysis() {
           state = 4;
         } else if (nowC == 'E' || nowC == 'e') {
           state = 5;
+        } else if (isLetter()) {
+          throwError("Illegal number.");
         } else {
           retreatPtr();
           insertConstant();
@@ -415,8 +389,10 @@ void lexAnalysis() {
         if (isDigit()) {
           numDoub += qkpow(0.1, ++numK) * (nowC - '0');
           state = 4;
-        } else
-          throwError("");
+        } else {
+          retreatPtr();
+          insertOp();
+        }
         break;
 
       case 4:
@@ -437,15 +413,17 @@ void lexAnalysis() {
         } else if (nowC == '+' || nowC == '-') {
           if (nowC == '-') numF = -1;
           state = 6;
-        } else
-          throwError("");
+        } else {
+          retreatPtr();
+          insertConstant();
+        }
         break;
       case 6:
         if (isDigit()) {
           numE = numE * 10 + nowC - '0';
           state = 7;
         } else
-          throwError("");
+          throwError("Illegal number.");
         break;
       case 7:
         if (isDigit()) {
@@ -461,7 +439,17 @@ void lexAnalysis() {
         insertOp();
         break;
       case 9:
-        if ((nowC != (*backPtr(2))) && (nowC != '=')) retreatPtr();
+        if (nowC == (*backPtr(2))) {
+          state = 19;
+        } else if (nowC == '=') {
+          insertOp();
+        } else {
+          retreatPtr();
+          insertOp();
+        }
+        break;
+      case 10:
+        retreatPtr();
         insertOp();
         break;
       case 11:
@@ -482,7 +470,11 @@ void lexAnalysis() {
         }
         break;
       case 12:
-        if (nowC == '\n' || nowC == '\r') state = 0;
+        if (nowC == '\n' || nowC == '\r') {
+          fprintf(outfp, "\nLine %d:\n", ++lineCnt);
+          charInLine = 0;
+          state = 0;
+        }
         break;
       case 13:
         if (nowC == '*') state = 14;
@@ -497,14 +489,23 @@ void lexAnalysis() {
         state = 16;
         break;
       case 16:
-        if (nowC == '\'') insertChar();
+        if (nowC == '\'')
+          insertChar();
+        else
+          throwError("Too many characters entered.");
         break;
       case 17:
-        if (nowC == '\"') insertStr();
-        if (nowC == '\n' || nowC == '\r') throwError("Lack of \"");
+        if (nowC == '\"')
+          insertStr();
+        else if (nowC == '\n' || nowC == '\r')
+          throwError("Lack of \"");
         break;
-      case 10:
-        retreatPtr();
+      case 18:
+        if (nowC != (*backPtr(2)) && nowC != '=') retreatPtr();
+        insertOp();
+        break;
+      case 19:
+        if (nowC != '=') retreatPtr();
         insertOp();
         break;
       default:
@@ -515,8 +516,9 @@ void lexAnalysis() {
   fprintf(outfp,
           "\nTotal:\n\t%d line\n\t%d tokens\n\t%d keywords\n\t%d "
           "identifiers\n\t%d "
-          "constants\n\t%d operator\n\t%d string\n\t%d char\n",
-          lineCnt, wordCnt, keywordCnt, idCnt, numCnt, opCnt, strCnt, charCnt);
+          "constants\n\t%d operator\n\t%d string\n\t%d char\nTotal error: %d",
+          lineCnt, wordCnt, keywordCnt, idCnt, numCnt, opCnt, strCnt, charCnt,
+          errorCnt);
 }
 
 int main(int argc, char **argv) {
@@ -525,5 +527,6 @@ int main(int argc, char **argv) {
   lexAnalysis();
   fclose(infp);
   fclose(outfp);
+  printf("Lexical analysis succeed. Result saved to %s", outputPath);
   return 0;
 }
