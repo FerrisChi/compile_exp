@@ -21,39 +21,39 @@ class Symbol {
   }
   enum Type { Terminal, NonTerminal } type;
   std::string name;
-  int print(char end = ' ') {
-    printf("%s%c", name.c_str(), end);
-    int l = name.length() + (end != '\0');
+  int print(const char *end = " ") {
+    printf("%s%s", name.c_str(), end);
+    int l = name.length() + !(strcmp(end, "\0") == 0);
     if (name == "ε") l--;
     return l;
   };
 };
 
-class Item {
- public:
-  vector<Symbol> s;
-  int print(char end = ' ') {
-    int cnt = 0;
-    for (auto x : s) cnt += x.print('\0');
-    printf("%c", end);
-    return cnt + (end != '\0');
-  }
-};
+// class Item {
+//  public:
+//   vector<Symbol> s;
+//   int print(char end = ' ') {
+//     int cnt = 0;
+//     for (auto x : s) cnt += x.print('\0');
+//     printf("%c", end);
+//     return cnt + (end != '\0');
+//   }
+// };
 
 // 2型文法
 class Grammar {
  private:
-  void Init(std::string fpgram);
-  bool isCalcFirst;
-  bool isCalcFollow;
+  void Init(const char *inp);
 
  public:
+  bool isCalcFirst;
+  bool isCalcFollow;
   int Start;
   vector<Symbol> symbols;
   vector<vector<int>> items;
   vector<int> T;
   vector<int> N;
-  vector<pair<int,int>> P;  // <id of symbol, id of item>
+  vector<pair<int, int>> P;  // <id of symbol, id of item>
   vector<vector<int>> first, follow;
   void CalcFirst();
   void CalcFollow();
@@ -69,6 +69,7 @@ class Grammar {
                     vector<int> &item);  // judge if {nonterminal -> item} is a
                                          // valid production.
 
-  Grammar();
+  Grammar(){};
+  Grammar(const char *inp);
   ~Grammar();
 };

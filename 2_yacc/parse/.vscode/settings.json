@@ -2,6 +2,11 @@
     "files.associations": {
         "cstring": "cpp",
         "map": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "cstdlib": "cpp"
     }
 }

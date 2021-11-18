@@ -1,6 +1,8 @@
 #include "parser.h"
 
 bool LL1Parser::GetLL1Table() {
+  gram.CalcFirst();
+  gram.CalcFollow();
   int nowId, termId;
   vector<int> nowFirst;
   for (int prodId = 0; prodId < gram.P.size(); prodId++) {
@@ -42,15 +44,12 @@ bool LL1Parser::GetLL1Table() {
 
   return true;
 }
-
-inline void printBlank(int cnt) {
-  for (int i = 0; i < cnt; i++) printf(" ");
-}
 void LL1Parser::PrintTable() {
   printf("\nLL1 analysis table:\n");
-  printBlank(MAX_PROD_LEN);
+  printBlank(MAX_PROD_LEN - 2);
+  printf("| ");
   for (auto termId : gram.T) {
-    int cnt = gram.symbols[termId].print('\0');
+    int cnt = gram.symbols[termId].print("\0");
     printBlank(MAX_PROD_LEN - cnt);
   }
   printf("\n");
@@ -58,7 +57,7 @@ void LL1Parser::PrintTable() {
   printf("\n");
 
   for (auto nontermId : gram.N) {
-    int cnt = gram.symbols[nontermId].print('\0');
+    int cnt = gram.symbols[nontermId].print("\0");
     printBlank(MAX_PROD_LEN - cnt - 2);
     printf("| ");
     for (auto termId : gram.T) {
@@ -67,11 +66,11 @@ void LL1Parser::PrintTable() {
         cnt = 4;
         printf("SYNC");
       } else if (LL1Table[make_pair(nontermId, termId)] != ERROR) {
-        cnt = gram.symbols[nontermId].print('\0') + 4;
+        cnt = gram.symbols[nontermId].print("\0") + 4;
         printf(" -> ");
         int itemId = LL1Table[make_pair(nontermId, termId)];
         for (auto t : gram.items[itemId]) {
-          cnt += gram.symbols[t].print('\0');
+          cnt += gram.symbols[t].print("\0");
         }
       }
       printBlank(MAX_PROD_LEN - cnt);
@@ -81,20 +80,20 @@ void LL1Parser::PrintTable() {
   printf("\n");
 }
 
-void LL1Parser::PrintStack(stack<int> &stk, char end = '\n') {
+void LL1Parser::PrintStack(stack<int> &stk, const char *end = "\n") {
   printf("Stack: ");
   stack<int> tmpStk(stk);
   while (!tmpStk.empty()) {
     gram.symbols[tmpStk.top()].print();
     tmpStk.pop();
   }
-  printf("%c", end);
+  printf("%s", end);
 }
 
-void LL1Parser::PrintVec(vector<int> &vec, int start, char end = '\n') {
+void LL1Parser::PrintVec(vector<int> &vec, int start, const char *end = "\n") {
   printf("Input: ");
   for (int x = start; x < vec.size(); x++) gram.symbols[vec[x]].print();
-  printf("%c", end);
+  printf("%s", end);
 }
 
 bool LL1Parser::LL1Analysis(Item inp) {
@@ -106,14 +105,14 @@ bool LL1Parser::LL1Analysis(Item inp) {
   int nowId, p = 0;
   do {
     nowId = stk.top();
-    PrintStack(stk, '\t');
-    PrintVec(inp, p, '\t');
+    PrintStack(stk, "\t");
+    PrintVec(inp, p, "\t");
     if (gram.isTerminal(nowId) || nowId == DOLLAR_ID) {  // nowId is terminal
       if (nowId == inp[p]) {
         stk.pop();
         p++;
         printf("eliminate ");
-        gram.symbols[nowId].print('\n');
+        gram.symbols[nowId].print("\n");
       } else {
         printf("Error\n");
         return false;
@@ -139,10 +138,10 @@ bool LL1Parser::LL1Analysis(Item inp) {
         // M[nowId, inp[p]] = synch
         printf("Error, pop out ");
         stk.pop();
-        gram.symbols[nowId].print('\n');
+        gram.symbols[nowId].print("\n");
       } else {  // M[nowId, inp[p]] = error
         printf("Error, skip ");
-        gram.symbols[inp[p++]].print('\n');
+        gram.symbols[inp[p++]].print("\n");
         return false;
       }
     }

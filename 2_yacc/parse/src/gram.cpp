@@ -1,15 +1,15 @@
 #include "gram.h"
 
-Grammar::Grammar() {
-  this->Init(string("../data/grammar3.in"));
+Grammar::Grammar(const char *inp = "../data/grammar.in") {
+  this->Init(inp);
   isCalcFirst = false;
   isCalcFollow = false;
 }
 
 Grammar::~Grammar() {}
 
-void Grammar::Init(std::string fpgram) {
-  FILE *fgram = fopen(fpgram.c_str(), "r");
+void Grammar::Init(const char *inp) {
+  FILE *fgram = fopen(inp, "r");
   int state = 0, nowSymbolId;
   char s[1005];
   symbols.push_back(Symbol("$", 1));
@@ -129,7 +129,7 @@ bool Grammar::isInFollow(int termId, int nontermId) {
 }
 
 void Grammar::Debug() {
-  printf("Symbols:\n");
+  printf("\nGrammar outline: \nSymbols:\n");
   for (int i = 0; i < symbols.size(); i++) {
     printf("\t id: %d %ld, %s %s", i, symbols[i].name.size(),
            symbols[i].name.c_str(),
@@ -149,7 +149,7 @@ void Grammar::Debug() {
 }
 
 void Grammar::Print() {
-  printf("Terminal character: ");
+  printf("\nGrammar info: \nTerminal character: ");
   for (int i = 0; i < T.size(); i++) {
     printf("%s ", symbols[T[i]].name.c_str());
   }
