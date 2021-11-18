@@ -17,13 +17,15 @@ Reference:
 
 c++ version: 
 
-GitHub in ref\
+​	GitHub in ref\
+
+​	[Microsoft Ignite](https://docs.microsoft.com/en-us/cpp/c-language/c-character-constants?view=msvc-160)
 
 lex version:
 
-[lex入门](https://www.bwangel.me/2019/12/15/flex/)
+​	[lex入门](https://www.bwangel.me/2019/12/15/flex/)
 
-[lex网络教程](https://blog.csdn.net/wp1603710463/article/details/50365495)
+​	[lex网络教程](https://blog.csdn.net/wp1603710463/article/details/50365495)
 
-[另一个示例](https://rtoax.blog.csdn.net/article/details/79947149?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link)
+​	[另一个示例](https://rtoax.blog.csdn.net/article/details/79947149?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link)
 

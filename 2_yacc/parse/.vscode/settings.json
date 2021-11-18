@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "cstring": "cpp",
+        "map": "cpp",
+        "algorithm": "cpp"
+    }
+}

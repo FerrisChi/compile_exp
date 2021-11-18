@@ -1,0 +1,18 @@
+Terminal: 
+    , num id ( )
+
+Nonterminal:
+    E A B L L'
+
+Production:
+    E -> A
+    E -> B
+    A -> num
+    A -> id
+    B -> (L)
+    L -> EL'
+    L' -> ,L
+    L' -> ε
+
+Start:
+    E

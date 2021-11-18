@@ -1,0 +1,20 @@
+Terminal: 
+    + - * / ( ) num
+
+Nonterminal:
+    E T F E' T'
+
+Production:
+    E -> TE'
+    E' -> +TE'
+    E' -> -TE'
+    E' -> ε
+    T -> FT'
+    T' -> *FT'
+    T' -> /FT'
+    T' -> ε
+    F -> (E)
+    F -> num
+
+Start:
+    E
