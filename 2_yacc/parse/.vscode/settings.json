@@ -7,6 +7,16 @@
         "deque": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp",
+        "random": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp",
+        "valarray": "cpp",
+        "cmath": "cpp",
+        "iostream": "cpp"
     }
 }

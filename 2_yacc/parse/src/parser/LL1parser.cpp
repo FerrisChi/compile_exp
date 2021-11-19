@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "parser/ll1parser.h"
 
 bool LL1Parser::GetLL1Table() {
   gram.CalcFirst();
@@ -46,11 +46,11 @@ bool LL1Parser::GetLL1Table() {
 }
 void LL1Parser::PrintTable() {
   printf("\nLL1 analysis table:\n");
-  printBlank(MAX_PROD_LEN - 2);
+  PrintBlank(MAX_PROD_LEN - 2);
   printf("| ");
   for (auto termId : gram.T) {
     int cnt = gram.symbols[termId].print("\0");
-    printBlank(MAX_PROD_LEN - cnt);
+    PrintBlank(MAX_PROD_LEN - cnt);
   }
   printf("\n");
   for (int i = 0; i < (gram.T.size() + 1) * MAX_PROD_LEN; i++) printf("-");
@@ -58,7 +58,7 @@ void LL1Parser::PrintTable() {
 
   for (auto nontermId : gram.N) {
     int cnt = gram.symbols[nontermId].print("\0");
-    printBlank(MAX_PROD_LEN - cnt - 2);
+    PrintBlank(MAX_PROD_LEN - cnt - 2);
     printf("| ");
     for (auto termId : gram.T) {
       cnt = 0;
@@ -73,7 +73,7 @@ void LL1Parser::PrintTable() {
           cnt += gram.symbols[t].print("\0");
         }
       }
-      printBlank(MAX_PROD_LEN - cnt);
+      PrintBlank(MAX_PROD_LEN - cnt);
     }
     printf("\n");
   }
@@ -97,7 +97,7 @@ void LL1Parser::PrintVec(vector<int> &vec, int start, const char *end = "\n") {
 }
 
 bool LL1Parser::LL1Analysis(Item inp) {
-  printf("Start nonrecursive analysis.\n");
+  printf("\nStart nonrecursive analysis.\n");
   stack<int> stk;
   stk.push(DOLLAR_ID);
   stk.push(gram.Start);

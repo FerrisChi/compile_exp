@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "parser/lrparser.h"
 
 void LRParser::GetExtG() {
   if (isExt) return;
@@ -39,11 +39,27 @@ void LRParser::PrintLR0Set(const LR0Set& lR0Set, const char* end = "\n") {
 }
 
 void LRParser::PrintLR0Fmly() {
-  printf("LR0 lR0Fmly:\n{\n");
-  int cnt = 0;
-  for (auto lR0Set : lR0Fmly) {
-    printf("Set %d: ", cnt++);
-    PrintLR0Set(lR0Set, "\n");
+  printf("\nLR0 DFA:\n{\n");
+  pair<int, int> pr;
+  for (int i = 0; i < lR0Fmly.size(); i++) {
+    printf("Set %d: ", i);
+    PrintLR0Set(lR0Fmly[i], "\0");
+    int fr = 1;
+    for (int x = 0; x < extGram.symbols.size(); x++) {
+      pr = make_pair(i, x);
+      if (actionTable.find(pr) != actionTable.end() &&
+          actionTable[pr].first == SHIFT) {
+        if (fr) {
+          fr = 0;
+          printf(" |   read ");
+        } else
+          printf(", ");
+        printf("\'");
+        extGram.symbols[x].print("\' -> ");
+        printf("set %d", actionTable[pr].second);
+      }
+    }
+    printf(" \n");
   }
   printf("}\n");
 }
@@ -63,11 +79,16 @@ void LRParser::GetClosure(LR0Item begItem, LR0Set& set) {
       if (x == item.size() - 1 || extGram.isTerminal(item[++x])) continue;
       // A -> α·Bη, B is nonterminal
       for (auto prod : extGram.P)
-        if (prod.first == item[x]) {  // add B -> ·η to current LR0 set
+        if (prod.first == item[x]) {
+          // add B -> ·η to current LR0 set
           LR0Item newLR0Item;
           newLR0Item.first = item[x];
-          newLR0Item.second = vector<int>(extGram.items[prod.second]);
-          newLR0Item.second.insert(newLR0Item.second.begin(), DOT_ID);
+          if (extGram.items[prod.second][0] == EPSILON_ID) {
+            newLR0Item.second = vector<int>({DOT_ID});
+          } else {
+            newLR0Item.second = vector<int>(extGram.items[prod.second]);
+            newLR0Item.second.insert(newLR0Item.second.begin(), DOT_ID);
+          }
           int flag = 0;
           for (auto befItem : set)
             if (befItem == newLR0Item) {
@@ -85,8 +106,8 @@ void LRParser::GetClosure(LR0Item begItem, LR0Set& set) {
 }
 
 void LRParser::GetGo(LR0Set nowSet, int x, LR0Set& newSet) {
-  printf("Calc GO(I,%d:%s)\n", x, extGram.symbols[x].name.c_str());
-  PrintLR0Set(nowSet, "\n");
+  // printf("Calc GO(I,%d:%s)\n", x, extGram.symbols[x].name.c_str());
+  // PrintLR0Set(nowSet, "\n");
   newSet.clear();
   LR0Set tmpSet;
   for (auto lR0Item : nowSet) {
@@ -105,12 +126,11 @@ void LRParser::GetGo(LR0Set nowSet, int x, LR0Set& newSet) {
     uniSet.resize(itt - uniSet.begin());
     newSet = uniSet;
   }
-  printf("result: ");
-  PrintLR0Set(newSet, "\n");
+  // printf("result: ");
+  // PrintLR0Set(newSet, "\n");
 }
 
 void LRParser::GetSLRTable() {
-  GetExtG();
   extGram.CalcFirst();
   extGram.CalcFollow();
 
@@ -140,37 +160,41 @@ void LRParser::GetSLRTable() {
               break;
             }
           }
-          if (in == -1) {  // add newSet to LR(0) sets family
+          if (in == -1) {
+            // add newSet to LR(0) sets family
             lR0Fmly.push_back(newSet);
             in = lR0Fmly.size() - 1;
             for (auto lR0Item : newSet) {
               if (lR0Item == succItem) {
-                printf("action[%d, %d]=ACC\n", in, DOLLAR_ID);
+                // printf("action[%d, %d]=ACC\n", in, DOLLAR_ID);
                 actionTable[make_pair(in, DOLLAR_ID)] = make_pair(ACCEPT, 0);
-              } else if (lR0Item.second.back() ==
-                         DOT_ID) {  // action[i,a]=R (A->α)
+              } else if (lR0Item.second.back() == DOT_ID) {
+                // action[i,a]=R (A->α)
                 LR0Item tmp = lR0Item;
                 tmp.second.pop_back();
                 int prodId;
                 for (int p = 0; p < extGram.P.size(); p++)
-                  if (tmp.first == extGram.P[p].first &&
-                      tmp.second == extGram.items[extGram.P[p].second]) {
-                    prodId = p;
-                    break;
+                  if (tmp.first == extGram.P[p].first) {
+                    if (tmp.second == extGram.items[extGram.P[p].second] ||
+                        (tmp.second.empty() &&
+                         extGram.items[extGram.P[p].second][0] == EPSILON_ID)) {
+                      prodId = p;
+                      break;
+                    }
                   }
                 for (auto x : extGram.follow[lR0Item.first]) {
                   actionTable[make_pair(in, x)] = make_pair(REDUCE, prodId);
-                  printf("action[%d, %d]=R%d\n", in, x, prodId);
+                  // printf("action[%d, %d]=R%d\n", in, x, prodId);
                 }
               }
             }
           }
           if (extGram.isTerminal(x)) {
             actionTable[make_pair(i, x)] = make_pair(SHIFT, in);
-            printf("action[%d, %d]=S%d\n", i, x, in);
+            // printf("action[%d, %d]=S%d\n", i, x, in);
           } else {
             gotoTable[make_pair(i, x)] = in;
-            printf("goto[%d, %d]=%d\n", i, x, in);
+            // printf("goto[%d, %d]=%d\n", i, x, in);
           }
         }
     }
@@ -180,16 +204,17 @@ void LRParser::GetSLRTable() {
 }
 
 void LRParser::PrintLRTable() {
+  printf("\nSLR(1) Table:\n");
   int blank1 = (extGram.T.size() - 1) * 8 - 5,
       blank2 = (extGram.N.size() - 1) * 8 - 4;
   printf("State\t");
-  printBlank(blank1 / 2);
+  PrintBlank(blank1 / 2);
   printf("action");
-  printBlank(blank1 - blank1 / 2 - 1);
+  PrintBlank(blank1 - blank1 / 2 - 1);
   printf("|");
-  printBlank(blank2 / 2);
+  PrintBlank(blank2 / 2);
   printf("goto");
-  printBlank(blank2 - blank2 / 2 - 1);
+  PrintBlank(blank2 - blank2 / 2 - 1);
   printf("|\n\t| ");
 
   for (auto x : extGram.T)
@@ -233,30 +258,69 @@ void LRParser::PrintLRTable() {
   printf("\n");
 }
 
-bool LRParser::LRAnalysis(Item inp) {
+void LRParser::PrintStk(vector<pair<int, int>>& stk, const char* c = "\n") {
+  printf("{ ");
+  for (auto pr : stk) {
+    printf("<");
+    printf("%d, ", pr.first);
+    if (pr.second >= 0) extGram.symbols[pr.second].print("\0");
+    printf(">");
+    if (pr != stk.back()) printf(", ");
+  }
+  printf(" }%s", c);
+}
+
+bool LRParser::SLRAnalysis(Item inp) {
   int pos = 0, state, symbolId;
   vector<pair<int, int>> stk;  // <state, symbol>
   stk.push_back(make_pair(0, -1));
-  pair<int, int> stpr;
+  pair<int, int> stpr, ckpr;
   pair<ActionType, int> acpr;
+  inp.push_back(DOLLAR_ID);
+  printf("\nStarting analysis:\n");
+  int cnt = 0;
   do {
+    cnt++;
+    printf("Step %d:\n", cnt);
+    PrintStk(stk, "\n");
+    extGram.PrintItem(Item(inp.begin() + pos, inp.end()), "\n");
+
     stpr = stk.back();
     symbolId = inp[pos];
-    if (actionTable.find(stpr) ==
+    ckpr = make_pair(stpr.first, symbolId);
+    if (actionTable.find(ckpr) ==
         actionTable.end()) {  // not found in action table;
       printf("Error\n");
       return false;
     }
-    acpr = actionTable[make_pair(stpr.first, symbolId)];
+    acpr = actionTable[ckpr];
     if (acpr.first == SHIFT) {
       stk.push_back(make_pair(acpr.second, symbolId));
       pos++;
+      printf("shift %d\n", acpr.second);
     } else if (acpr.first == REDUCE) {
       // pop |β| pair, push <goto[S',A], A>, output A->β
+      int itemId = extGram.P[acpr.second].second;
+      if (extGram.items[itemId][0] != EPSILON_ID) {  // avoid ε
+        int popCnt = extGram.items[itemId].size();
+        for (int _ = 0; _ < popCnt; _++) stk.pop_back();
+      }
+      pair<int, int> nxpr;
+      int A = extGram.P[acpr.second].first, S_ = stk.back().first;
+      nxpr.first = gotoTable[make_pair(S_, A)];
+      nxpr.second = A;
+      stk.push_back(nxpr);
 
+      printf("reduce by: ");
+      extGram.PrintProd(acpr.second, ", ");
+      printf("goto[%d,", S_);
+      extGram.symbols[A].print("]=");
+      printf("%d\n", nxpr.first);
     } else if (acpr.first == ACCEPT) {
-      printf("LR(0) accepted.\n");
+      printf("ACC\n");
       return true;
     }
+    printf("\n");
   } while (1);
+  return false;
 }

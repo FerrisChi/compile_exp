@@ -1,6 +1,6 @@
 #include "gram.h"
 
-Grammar::Grammar(const char *inp = "../data/grammar.in") {
+Grammar::Grammar(const char *inp = "data/grammar.in") {
   this->Init(inp);
   isCalcFirst = false;
   isCalcFollow = false;
@@ -12,9 +12,9 @@ void Grammar::Init(const char *inp) {
   FILE *fgram = fopen(inp, "r");
   int state = 0, nowSymbolId;
   char s[1005];
-  symbols.push_back(Symbol("$", 1));
+  symbols.push_back(Symbol("$", Symbol::Terminal));
   T.push_back(0);
-  symbols.push_back(Symbol("ε", 1));
+  symbols.push_back(Symbol("ε", Symbol::Terminal));
   T.push_back(1);
   while (1) {
     if (fscanf(fgram, "%s", s) == EOF) break;
@@ -31,13 +31,13 @@ void Grammar::Init(const char *inp) {
       switch (state) {
         case 1:  // Terminal
         {
-          symbols.push_back(Symbol(s, 1));
+          symbols.push_back(Symbol(s, Symbol::Terminal));
           T.push_back(symbols.size() - 1);
           break;
         }
         case 2:  // Nonterminal
         {
-          symbols.push_back(Symbol(s, 0));
+          symbols.push_back(Symbol(s, Symbol::NonTerminal));
           N.push_back(symbols.size() - 1);
           break;
         }
@@ -168,6 +168,48 @@ void Grammar::Print() {
   printf("Start caracter: %s\n", symbols[Start].name.c_str());
 }
 
+int Grammar::PrintItem(vector<int> item, const char *c = "\n") {
+  int cnt = 0;
+  for (auto s : item) cnt += symbols[s].print("\0");
+  printf("%s", c);
+  return cnt += strlen(c);
+}
+
+int Grammar::PrintProd(int prodId, const char *c = "\n") {
+  auto prod = P[prodId];
+  int cnt = symbols[prod.first].print() + 3;
+  printf("-> ");
+  for (auto s : items[prod.second]) cnt += symbols[s].print("\0");
+  printf("%s", c);
+  return cnt + strlen(c);
+}
+
+void Grammar::PrintFirst() {
+  printf("\nFirst:\n");
+  for (int i = 0; i < symbols.size(); i++)
+    if (symbols[i].type == Symbol::NonTerminal) {
+      printf("\t%s: ", symbols[i].name.c_str());
+      sort(first[i].begin(), first[i].end());
+      for (int k = 0; k < first[i].size(); k++) {
+        printf("%s ", symbols[first[i][k]].name.c_str());
+      }
+      printf("\n");
+    }
+}
+
+void Grammar::PrintFollow() {
+  printf("\nFollow:\n");
+  for (int i = 0; i < symbols.size(); i++)
+    if (symbols[i].type == Symbol::NonTerminal) {
+      printf("\t%s: ", symbols[i].name.c_str());
+      sort(follow[i].begin(), follow[i].end());
+      for (int k = 0; k < follow[i].size(); k++) {
+        printf("%s ", symbols[follow[i][k]].name.c_str());
+      }
+      printf("\n");
+    }
+}
+
 void Grammar::CalcFirst() {
   if (isCalcFirst) return;
   for (int i = 0; i < symbols.size(); i++) first.push_back({});
@@ -219,16 +261,6 @@ void Grammar::CalcFirst() {
     }
     if (!flag) break;
   }
-  printf("First:\n");
-  for (int i = 0; i < symbols.size(); i++)
-    if (symbols[i].type == Symbol::NonTerminal) {
-      printf("\t%s: ", symbols[i].name.c_str());
-      sort(first[i].begin(), first[i].end());
-      for (int k = 0; k < first[i].size(); k++) {
-        printf("%s ", symbols[first[i][k]].name.c_str());
-      }
-      printf("\n");
-    }
   isCalcFirst = true;
 }
 
@@ -312,15 +344,5 @@ void Grammar::CalcFollow() {
     }
     if (!flag) break;
   }
-  printf("Follow:\n");
-  for (int i = 0; i < symbols.size(); i++)
-    if (symbols[i].type == Symbol::NonTerminal) {
-      printf("\t%s: ", symbols[i].name.c_str());
-      sort(follow[i].begin(), follow[i].end());
-      for (int k = 0; k < follow[i].size(); k++) {
-        printf("%s ", symbols[follow[i][k]].name.c_str());
-      }
-      printf("\n");
-    }
   isCalcFollow = true;
 }

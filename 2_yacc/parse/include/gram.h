@@ -17,7 +17,10 @@ class Symbol {
   Symbol(){};
   Symbol(const char *name, int type) {
     this->name = name;
-    this->type = type == 1 ? Terminal : NonTerminal;
+    this->type = type == 0 ? Terminal : NonTerminal;
+  }
+  bool operator==(const Symbol &s) {
+    return (this->name == s.name) && (this->type == s.type);
   }
   enum Type { Terminal, NonTerminal } type;
   std::string name;
@@ -28,17 +31,6 @@ class Symbol {
     return l;
   };
 };
-
-// class Item {
-//  public:
-//   vector<Symbol> s;
-//   int print(char end = ' ') {
-//     int cnt = 0;
-//     for (auto x : s) cnt += x.print('\0');
-//     printf("%c", end);
-//     return cnt + (end != '\0');
-//   }
-// };
 
 // 2型文法
 class Grammar {
@@ -53,21 +45,30 @@ class Grammar {
   vector<vector<int>> items;
   vector<int> T;
   vector<int> N;
-  vector<pair<int, int>> P;  // <id of symbol, id of item>
+  // <id of symbol, id of item>
+  vector<pair<int, int>> P;
   vector<vector<int>> first, follow;
   void CalcFirst();
   void CalcFollow();
   void Print();
   void Debug();
-  void GetFirst(vector<int> item, vector<int> &f);  // get first set of item
-  bool isTerminal(int id);  // whether id is a terminal character
+
+  // print production {id} and return number of character printed
+  int PrintProd(int prodId, const char *c);
+  int PrintItem(vector<int> item, const char *c);
+  void PrintFirst();
+  void PrintFollow();
+  // get first set of item
+  void GetFirst(vector<int> item, vector<int> &f);
+  // whether id is a terminal character
+  bool isTerminal(int id);
   bool isNonNullTerminal(int id);
   bool isNonterminal(int id);
-  bool isInFirst(int id, vector<int> item);  // whether id is in first{item}
+  // whether id is in first{item}
+  bool isInFirst(int id, vector<int> item);
   bool isInFollow(int termId, int nontermId);
-  bool isProduction(int Nid,
-                    vector<int> &item);  // judge if {nonterminal -> item} is a
-                                         // valid production.
+  // judge if {nonterminal -> item} is a valid production.
+  bool isProduction(int Nid, vector<int> &item);
 
   Grammar(){};
   Grammar(const char *inp);
