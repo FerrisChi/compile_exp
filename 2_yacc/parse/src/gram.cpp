@@ -149,23 +149,23 @@ void Grammar::Debug() {
 }
 
 void Grammar::Print() {
-  printf("\nGrammar info: \nTerminal character: ");
+  printf("\nGrammar info: \nTerminal character:\n\t");
   for (int i = 0; i < T.size(); i++) {
     printf("%s ", symbols[T[i]].name.c_str());
   }
-  printf("\nNonterminal character: ");
+  printf("\nNonterminal character:\n\t");
   for (int i = 0; i < N.size(); i++) {
     printf("%s ", symbols[N[i]].name.c_str());
   }
   printf("\nProduction:\n");
   for (int i = 0; i < P.size(); i++) {
-    printf("%s -> ", symbols[P[i].first].name.c_str());
+    printf("\t%s -> ", symbols[P[i].first].name.c_str());
     for (int j = 0; j < items[P[i].second].size(); j++) {
       printf("%s", symbols[items[P[i].second][j]].name.c_str());
     }
     printf("\n");
   }
-  printf("Start caracter: %s\n", symbols[Start].name.c_str());
+  printf("Start caracter:\t%s\n", symbols[Start].name.c_str());
 }
 
 int Grammar::PrintItem(vector<int> item, const char *c = "\n") {
@@ -185,6 +185,7 @@ int Grammar::PrintProd(int prodId, const char *c = "\n") {
 }
 
 void Grammar::PrintFirst() {
+  if (!isCalcFirst) CalcFirst();
   printf("\nFirst:\n");
   for (int i = 0; i < symbols.size(); i++)
     if (symbols[i].type == Symbol::NonTerminal) {
@@ -198,6 +199,7 @@ void Grammar::PrintFirst() {
 }
 
 void Grammar::PrintFollow() {
+  if (!isCalcFollow) CalcFollow();
   printf("\nFollow:\n");
   for (int i = 0; i < symbols.size(); i++)
     if (symbols[i].type == Symbol::NonTerminal) {

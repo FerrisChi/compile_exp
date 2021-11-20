@@ -1,0 +1,48 @@
+Date : 2021-11-20 21:38:30
+Directory : v:\Code\exp_compile\2_yacc\parse
+Total : 19 files,  1355 codes, 117 comments, 134 blanks, all 1606 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         19 |      1,355 |        117 |        134 |      1,606 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                        | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                           |         19 |      1,355 |        117 |        134 |      1,606 |
+| include                                                     |          7 |        220 |         28 |         42 |        290 |
+| include\parser                                              |          4 |         91 |          9 |         24 |        124 |
+| src                                                         |          5 |      1,026 |         71 |         70 |      1,167 |
+| src\parser                                                  |          3 |        473 |         21 |         25 |        519 |
+| test                                                        |          6 |         86 |          0 |         20 |        106 |
++-------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                    | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------+----------+------------+------------+------------+------------+
+| v:\Code\exp_compile\2_yacc\parse\include\gram.h             | C++      |         63 |          8 |          8 |         79 |
+| v:\Code\exp_compile\2_yacc\parse\include\lexer.h            | C++      |         49 |         11 |          7 |         67 |
+| v:\Code\exp_compile\2_yacc\parse\include\parser\ll1parser.h | C++      |         19 |          1 |          5 |         25 |
+| v:\Code\exp_compile\2_yacc\parse\include\parser\lrparser.h  | C++      |         36 |          8 |         12 |         56 |
+| v:\Code\exp_compile\2_yacc\parse\include\parser\parser.h    | C++      |         12 |          0 |          2 |         14 |
+| v:\Code\exp_compile\2_yacc\parse\include\parser\recparser.h | C++      |         24 |          0 |          5 |         29 |
+| v:\Code\exp_compile\2_yacc\parse\include\utils.h            | C++      |         17 |          0 |          3 |         20 |
+| v:\Code\exp_compile\2_yacc\parse\src\gram.cpp               | C++      |        306 |         24 |         21 |        351 |
+| v:\Code\exp_compile\2_yacc\parse\src\lexer.cpp              | C++      |        247 |         26 |         24 |        297 |
+| v:\Code\exp_compile\2_yacc\parse\src\parser\LL1parser.cpp   | C++      |        139 |          5 |          7 |        151 |
+| v:\Code\exp_compile\2_yacc\parse\src\parser\LRparser.cpp    | C++      |        296 |         16 |         14 |        326 |
+| v:\Code\exp_compile\2_yacc\parse\src\parser\recparser.cpp   | C++      |         38 |          0 |          4 |         42 |
+| v:\Code\exp_compile\2_yacc\parse\test.cpp                   | C++      |         23 |         18 |          2 |         43 |
+| v:\Code\exp_compile\2_yacc\parse\test\LL1synthesis.cpp      | C++      |         17 |          0 |          2 |         19 |
+| v:\Code\exp_compile\2_yacc\parse\test\LL1test.cpp           | C++      |         13 |          0 |          5 |         18 |
+| v:\Code\exp_compile\2_yacc\parse\test\LRsynthesis.cpp       | C++      |         16 |          0 |          2 |         18 |
+| v:\Code\exp_compile\2_yacc\parse\test\LRtest.cpp            | C++      |         15 |          0 |          5 |         20 |
+| v:\Code\exp_compile\2_yacc\parse\test\Rectest.cpp           | C++      |         11 |          0 |          4 |         15 |
+| v:\Code\exp_compile\2_yacc\parse\test\lex.cpp               | C++      |         14 |          0 |          2 |         16 |
+| Total                                                       |          |      1,355 |        117 |        134 |      1,606 |
++-------------------------------------------------------------+----------+------------+------------+------------+------------+

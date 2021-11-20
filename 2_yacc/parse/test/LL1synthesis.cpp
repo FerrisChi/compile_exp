@@ -4,8 +4,10 @@
 
 using namespace std;
 int main() {
-  Grammar G("data/grammar3.in");
+  Grammar G("data/grammar.in");
   G.Print();
+  G.PrintFirst();
+  G.PrintFollow();
   Lexer lexer(G);
   vector<int> item;
   item = lexer.Analysis("data/expression.in");

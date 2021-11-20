@@ -18,7 +18,7 @@ class LL1Parser : public Parser {
   static const int ERROR = -2;
   static const int SYNC = -1;
   LL1Parser(Grammar gm) : Parser(gm){};
-  bool GetLL1Table();  // false means conflict
+  bool GetLL1Table();  // return false means conflict
   void PrintTable();
   bool LL1Analysis(Item input);
 };

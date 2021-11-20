@@ -2,8 +2,7 @@
 #include "parser/recparser.h"
 
 int main() {
-  // Grammar *G = new Grammar();
-  Grammar G("../data/grammar.in");
+  Grammar G("data/grammar.in");
   G.Print();
   G.Debug();
 

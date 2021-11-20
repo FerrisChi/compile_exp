@@ -34,6 +34,8 @@ class Symbol {
 
 // 2型文法
 class Grammar {
+  typedef vector<int> Item;
+
  private:
   void Init(const char *inp);
 
@@ -42,7 +44,7 @@ class Grammar {
   bool isCalcFollow;
   int Start;
   vector<Symbol> symbols;
-  vector<vector<int>> items;
+  vector<Item> items;
   vector<int> T;
   vector<int> N;
   // <id of symbol, id of item>
@@ -55,20 +57,20 @@ class Grammar {
 
   // print production {id} and return number of character printed
   int PrintProd(int prodId, const char *c);
-  int PrintItem(vector<int> item, const char *c);
+  int PrintItem(Item item, const char *c);
   void PrintFirst();
   void PrintFollow();
   // get first set of item
-  void GetFirst(vector<int> item, vector<int> &f);
+  void GetFirst(Item item, vector<int> &f);
   // whether id is a terminal character
   bool isTerminal(int id);
   bool isNonNullTerminal(int id);
   bool isNonterminal(int id);
   // whether id is in first{item}
-  bool isInFirst(int id, vector<int> item);
+  bool isInFirst(int id, Item item);
   bool isInFollow(int termId, int nontermId);
   // judge if {nonterminal -> item} is a valid production.
-  bool isProduction(int Nid, vector<int> &item);
+  bool isProduction(int Nid, Item &item);
 
   Grammar(){};
   Grammar(const char *inp);

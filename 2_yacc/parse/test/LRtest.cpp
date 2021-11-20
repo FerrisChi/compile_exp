@@ -2,7 +2,7 @@
 #include "parser/lrparser.h"
 
 int main() {
-  Grammar G("../data/grammar3.in");
+  Grammar G("data/grammar3.in");
   G.Print();
   G.Debug();
 

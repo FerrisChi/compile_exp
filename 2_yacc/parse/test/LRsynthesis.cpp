@@ -10,6 +10,7 @@ int main() {
   vector<int> item;
   item = lexer.Analysis("data/expression.in");
   LRParser lrParser(G);
+  lrParser.extGram.Debug(); 
   lrParser.GetSLRTable();
   lrParser.SLRAnalysis(item);
   return 0;
