@@ -19,4 +19,4 @@ y.tab.h: calc.y
 	echo"y.tab.h was created at the same time as y.tab.c." 
 
 clean:
-	rm -f calc.exe lex.yy.c y.tab.c y.tab.h
+	rm -f calc lex.yy.c y.tab.c y.tab.h
