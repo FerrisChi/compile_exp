@@ -25,8 +25,8 @@ linelist: line
 line : expression CR  {printf("Ans = %lf\n\n",$1);}
 
 expression: term
-    | expression ADD term {printf("Reduce by exp -> exp + term\n"); $$=$1+$3;}
-    | expression SUB term {printf("Reduce by exp -> exp - term\n"); $$=$1-$3;}
+    | expression {printf("SHIFT +\n");} ADD term {printf("Reduce by exp -> exp + term\n"); $$=$1+$3;}
+    | expression {printf("SHIFT -\n");} SUB term {printf("Reduce by exp -> exp - term\n"); $$=$1-$3;}
     ;
 
 term: frac

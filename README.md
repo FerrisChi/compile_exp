@@ -47,6 +47,16 @@ A C++ version with cmake in `parse\` and a Yacc version in `yacc\`
 
 Reference:
 
+c++ version:
+
+[消去左递归](https://blog.csdn.net/qq_40294512/article/details/89396595)
+
+[c++ template](https://blog.csdn.net/lyn631579741/article/details/110730145)
+
+
+
 yacc version:
 
 *ANSI C grammar, Lex specification*. [ANSI yacc(2011版)](http://www.quut.com/c/ANSI-C-grammar-y-2011.html)
+
+[Yacc介绍](https://blog.csdn.net/wp1603710463/article/details/50365640)
