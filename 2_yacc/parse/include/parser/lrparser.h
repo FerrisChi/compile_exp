@@ -37,8 +37,6 @@ class LRParser : public Parser {
   void GetGo(LR0Set nowSet, int x, LR0Set& newSet);
   void PrintLR0Item(const LR0Item& lR0Item, const char* end);
   void PrintLR0Set(const LR0Set& lR0Set, const char* end);
-  // print LR(0) set family and DFA
-  void PrintLR0Fmly();
   void PrintStk(vector<pair<int, int>>& stk, const char* c);
 
  public:
@@ -50,6 +48,8 @@ class LRParser : public Parser {
   // Get SLR(1) analysis table
   void GetSLRTable();
   void PrintLRTable();
+  // print LR(0) set family and DFA
+  void PrintLR0Fmly();
   // conduct a SLR(1) analysis
   bool SLRAnalysis(Item input);
 };
