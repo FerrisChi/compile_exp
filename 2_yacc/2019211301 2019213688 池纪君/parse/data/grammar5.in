@@ -1,0 +1,16 @@
+// 4.17
+Terminal: 
+    a b
+
+Nonterminal:
+    S A B
+
+Production:
+    S -> aSAB
+    S -> BA
+    A -> aA
+    A -> B
+    B -> b
+
+Start:
+    S

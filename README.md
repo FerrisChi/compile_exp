@@ -33,3 +33,20 @@ lex version:
 
 ## parser
 
+A syntactic parser of arithmetic expression with + - * / ( )
+
+A C++ version with cmake in `parse\` and a Yacc version in `yacc\`
+
+#### In C++ version:
+
+* Recursive analysis is intended for example grammar.
+* LL(1) analysis and SLR(1) is intended for arbitrary grammar.
+* Not eliminate left-recursion yet. To avoid the endless loop, grammar must have no left-recursion in productions when doing LL(1) and recursive analysis.
+
+
+
+Reference:
+
+yacc version:
+
+*ANSI C grammar, Lex specification*. [ANSI yacc(2011版)](http://www.quut.com/c/ANSI-C-grammar-y-2011.html)

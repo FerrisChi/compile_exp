@@ -1,0 +1,18 @@
+Terminal: 
+    + - * / ( ) i
+
+Nonterminal:
+    E T F A B
+
+Production:
+    E -> TA
+    A -> +TA
+    A -> ε
+    T -> FB
+    B -> *FB
+    B -> ε
+    F -> (E)
+    F -> i
+
+Start:
+    E
