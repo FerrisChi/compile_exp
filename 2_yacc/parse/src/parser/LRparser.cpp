@@ -47,16 +47,20 @@ void LRParser::PrintLR0Fmly() {
     int fr = 1;
     for (int x = 0; x < extGram.symbols.size(); x++) {
       pr = make_pair(i, x);
-      if (actionTable.find(pr) != actionTable.end() &&
-          actionTable[pr].first == SHIFT) {
+      if ((actionTable.find(pr) != actionTable.end() &&
+           actionTable[pr].first == SHIFT) ||
+          gotoTable.find(pr) != gotoTable.end()) {
         if (fr) {
           fr = 0;
-          printf(" |   read ");
+          printf(" |    ");
         } else
           printf(", ");
         printf("\'");
         extGram.symbols[x].print("\' -> ");
-        printf("set %d", actionTable[pr].second);
+        if (actionTable.find(pr) != actionTable.end())
+          printf("set %d", actionTable[pr].second);
+        else
+          printf("set %d", gotoTable[pr]);
       }
     }
     printf(" \n");
